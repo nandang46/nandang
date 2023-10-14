@@ -1,0 +1,42 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+
+	# Uncommenting if you want to remove www
+	#RewriteCond %{HTTPS} !=on
+	#RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+	#RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+	RewriteCond %{HTTPS} off
+	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+
+	# Fake Download and Register permalink
+	RewriteRule ^download/(.*)/(.*).mp4?$ https://%{HTTP_HOST}/download.php?date=$1&title=$2 [L]
+	RewriteRule ^register/(.*)/(.*).html?$ https://%{HTTP_HOST}/register.php?refid=$1&prodid=$2 [L]
+
+	# Movie and TV permalink structure
+	RewriteRule ^tv/(.*)-([0-9]+)-([0-9]+)/(.*)/(.*)?$ https://%{HTTP_HOST}/index.php?tv=$1&season=$2&episode=$3&title=$4&sub_id=$5 [L]
+	RewriteRule ^tv/(.*)-([0-9]+)-([0-9]+)/(.*)?$ https://%{HTTP_HOST}/index.php?tv=$1&season=$2&episode=$3&title=$4 [L]
+	RewriteRule ^tv/(.*)-([0-9]+)-([0-9]+)?$ https://%{HTTP_HOST}/index.php?tv=$1&season=$2&episode=$3 [L]
+	RewriteRule ^tv/(.*)-([0-9]+)/(.*)/(.*)?$ https://%{HTTP_HOST}/index.php?tv=$1&season=$2&title=$3&sub_id=$4 [L]
+	RewriteRule ^tv/(.*)-([0-9]+)/(.*)?$ https://%{HTTP_HOST}/index.php?tv=$1&season=$2&title=$3 [L]
+	RewriteRule ^tv/(.*)-([0-9]+)?$ https://%{HTTP_HOST}/index.php?tv=$1&season=$2 [L]
+	RewriteRule ^tv/(.*)/(.*)/(.*)?$ https://%{HTTP_HOST}/index.php?tv=$1&title=$2&sub_id=$3 [L]
+	RewriteRule ^tv/(.*)/(.*)?$ https://%{HTTP_HOST}/index.php?tv=$1&title=$2 [L]
+	RewriteRule ^tv/(.*)?$ https://%{HTTP_HOST}/index.php?tv=$1 [L]
+	RewriteRule ^movie/(.*)/(.*)/(.*)?$ https://%{HTTP_HOST}/index.php?movie=$1&title=$2&sub_id=$3 [L]
+	RewriteRule ^movie/(.*)/(.*)?$ https://%{HTTP_HOST}/index.php?movie=$1&title=$2 [L]
+	RewriteRule ^movie/(.*)?$ https://%{HTTP_HOST}/index.php?movie=$1 [L]
+	RewriteRule ^genre-movie/(.*)/(.*)/page/(.*)?$ https://%{HTTP_HOST}/genres.php?genremovie=$1&title=$2&page=$3 [L]
+	RewriteRule ^genre-movie/(.*)/(.*)?$ https://%{HTTP_HOST}/genres.php?genremovie=$1&title=$2 [L]
+	RewriteRule ^genre-tv/(.*)/(.*)/page/(.*)?$ https://%{HTTP_HOST}/genres.php?genretv=$1&title=$2&page=$3 [L]
+	RewriteRule ^genre-tv/(.*)/(.*)?$ https://%{HTTP_HOST}/genres.php?genretv=$1&title=$2 [L]
+	RewriteRule ^people/([0-9]+)-(.*)?$ https://%{HTTP_HOST}/people-bio.php?pid=$1&pname=$2 [L]
+
+	RewriteRule ^desc/?$ https://%{HTTP_HOST}/desc.php [L]
+	RewriteRule ^spam/?$ https://%{HTTP_HOST}/descq.php [L]
+
+	<IfModule mod_deflate.c>
+		<FilesMatch "\.(php|js|css|mp3|wmv|flv|html|htm)$">
+			SetOutputFilter DEFLATE
+		</FilesMatch>
+	</IfModule>
+</IfModule>
